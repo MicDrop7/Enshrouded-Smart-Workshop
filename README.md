@@ -151,4 +151,4 @@ The full list, with examples, is in [README.txt](README.txt).
 
 ---
 
-More Enshrouded mods by MicDrop7: [Enshrouded-Game-Mods](https://github.com/MicDrop7/Enshrouded-Game-Mods).
+More Enshrouded mods by MicDrop7: [Survivor Crafting Anywhere](https://github.com/MicDrop7/Enshrouded-Survivor-Crafting-Anywhere) · [Quick Stack Area](https://github.com/MicDrop7/Enshrouded-Quick-Stack-Area) · [Free Skill Unlocks](https://github.com/MicDrop7/Enshrouded-Free-Skill-Unlocks).
