@@ -11,9 +11,11 @@
 Older: [1.0.0](SmartWorkshop-1.0.0.zip) / [1.0.0 server](SmartWorkshop-server-1.0.0.zip)
 
 **Pre-release 1.2.0 (testing):** optional support for [Kiln](https://github.com/frostdev-ops/kiln) by Frostdev on
-dedicated servers. [Release notes](https://github.com/MicDrop7/Enshrouded-Smart-Workshop/releases/tag/v1.2.0) ·
+dedicated servers (hooks, refill, stop, resume and collect through Kiln's services), and a download for the
+[ShroudForge](https://shroudforge.net/) mod loader. [Release notes](https://github.com/MicDrop7/Enshrouded-Smart-Workshop/releases/tag/v1.2.0) ·
 [players](SmartWorkshop-1.2.0.zip) / [server](SmartWorkshop-server-1.2.0.zip) /
-[server with Kiln](SmartWorkshop-server-kiln-1.2.0.zip). 1.1.0 above stays the stable version until 1.2.0 is tested.
+[server with Kiln](SmartWorkshop-server-kiln-1.2.0.zip) / [ShroudForge](SmartWorkshop-shroudforge-1.2.0.zip).
+1.1.0 above stays the stable version until 1.2.0 is released on Nexus.
 
 **New in 1.1.0:** Automation and Dry run are one setting, **Automation: Off / Log only / On** (ini:
 `automation = off | log | on`; old `enabled` / `dryRun` lines keep working). Fixed: in a solo world the F6 menu said
