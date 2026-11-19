@@ -1,9 +1,19 @@
 SMART WORKSHOP - automated production stations for Enshrouded
 ==============================================================
 Smart Workshop by MicDrop7
-Version 1.1.0 (tested on game build 26430625 / dedicated server build 26430253)
+Version 1.2.0 (tested on game build 26430625 / dedicated server build 26430253)
 
-What's new in 1.1.0
+What's new in 1.2.0
+  * Optional support for Kiln by Frostdev (a mod framework for Enshrouded): on a dedicated server that runs Kiln,
+    Kiln can load Smart Workshop itself. It then hooks the game through Kiln, refills, stops, resumes and (on Kiln
+    0.2.0-dev.29.17 or later) collects through Kiln's station service, and checks admins through Kiln's player
+    service. See INSTALL - dedicated server with Kiln.
+    Kiln is NOT required: without it everything works exactly as before.
+  * Works with the ShroudForge mod loader: a separate download loads Smart Workshop through ShroudForge on your
+    PC or on a server. See INSTALL - with ShroudForge.
+  * A station that refuses a refill (no room, or the game's fill moved nothing) is not tried again for 5 minutes.
+
+What was new in 1.1.0
   * "Automation" and "Dry run" are now one setting, Automation: Off / Log only / On (ini: automation = off/log/on).
     Your existing enabled / dryRun lines keep working; the menu replaces them when you change Automation there.
   * Fixed: the F6 menu no longer says "This server does not run Smart Workshop" in a solo world.
@@ -40,7 +50,7 @@ INSTALL - single player, or hosting a game for friends from your own PC
 Requires Ultimate ASI Loader (dinput8.dll in the Enshrouded folder; many mods already install it):
   https://github.com/ThirteenAG/Ultimate-ASI-Loader/releases
 
-  1. Copy the "Scripts" folder from SmartWorkshop-1.1.0.zip into your Enshrouded folder
+  1. Copy the "Scripts" folder from SmartWorkshop-1.2.0.zip into your Enshrouded folder
      (e.g. ...\steamapps\common\Enshrouded\). You get:
         Enshrouded\Scripts\SmartWorkshop.asi
         Enshrouded\Scripts\SmartWorkshop\smart-workshop.ini
@@ -53,7 +63,7 @@ Requires Ultimate ASI Loader (dinput8.dll in the Enshrouded folder; many mods al
 INSTALL - dedicated server
 --------------------------
 The server needs the plugin (it does the work). Players only need it to use the F6 menu on that server.
-Use the server download (SmartWorkshop-server-1.1.0.zip). It contains one folder:
+Use the server download (SmartWorkshop-server-1.2.0.zip). It contains one folder:
      SmartWorkshop\SmartWorkshop.dll
      SmartWorkshop\smart-workshop.ini
      SmartWorkshop\README.txt
@@ -71,6 +81,49 @@ Use the server download (SmartWorkshop-server-1.1.0.zip). It contains one folder
   3. Restart the server. smart-workshop.log appears in mods\SmartWorkshop\, next to smart-workshop.ini.
   4. Players who want to change the server's settings in game install the normal download (see above) on
      their own PC. Players without it are not affected.
+
+
+INSTALL - dedicated server with Kiln (optional)
+-----------------------------------------------
+For servers that already run Kiln by Frostdev (https://github.com/frostdev-ops/kiln), version 0.2.0-dev.29.15 or
+later. Kiln itself is not needed for Smart Workshop; use this only if your server has it.
+Use SmartWorkshop-server-kiln-1.2.0.zip. Unpack it into the server folder (where enshrouded_server.exe is):
+     kiln\native\SmartWorkshop\SmartWorkshop.dll   (Kiln loads it)
+     kiln\native\SmartWorkshop\native.json         (tells Kiln what it is)
+     mods\SmartWorkshop\smart-workshop.ini         (settings and logs, as in the normal server install)
+     mods\SmartWorkshop\README.txt
+     mods\SmartWorkshop\mod.json
+
+  1. Unpack the zip into the server folder. If you are updating from a normal server install, keep your
+     mods\SmartWorkshop\smart-workshop.ini (do not overwrite it) and REMOVE the old copy of the DLL that your
+     loader started (Scripts\SmartWorkshop.asi, or DLLMods\SmartWorkshop.dll and its chainloader.ini line).
+  2. Restart the server. smart-workshop.log (in mods\SmartWorkshop\) then starts with
+        Kiln <version> loads Smart Workshop: hooks through kiln.hooks, fill / stop / resume / collect through kiln.stations
+     and kiln\logs\kiln.log lists "native mod smart-workshop 1.2.0 loaded".
+  3. Players do not need Kiln. They install the normal download only if they want the F6 menu.
+  To switch it off: put an empty file named .disabled into kiln\native\SmartWorkshop\ (or delete that folder)
+  and restart.
+  If a second copy is still installed through a DLL loader, only one runs: that copy stands aside while Kiln
+  loads Smart Workshop, and starts by itself if Kiln's copy has not started within 20 seconds.
+
+
+INSTALL - with ShroudForge (players and servers)
+------------------------------------------------
+ShroudForge installs its own dinput8.dll and winmm.dll, which replace Ultimate ASI Loader, so the normal download
+(Scripts\SmartWorkshop.asi) does not load with it. Use SmartWorkshop-shroudforge-1.2.0.zip instead. Unpack it into
+the game folder (where enshrouded.exe is) or the server folder (where enshrouded_server.exe is):
+     mods\SmartWorkshop\SmartWorkshop.dll
+     mods\SmartWorkshop\native-plugin.ini     (tells ShroudForge to load the DLL)
+     mods\SmartWorkshop\smart-workshop.ini    (settings; the log appears next to it)
+     mods\SmartWorkshop\README.txt
+
+  1. Close the game (or stop the server) and unpack the zip. If you used Smart Workshop before, copy your
+     smart-workshop.ini from Scripts\SmartWorkshop\ (or the server's mods\SmartWorkshop\) over the new one, and
+     delete Scripts\SmartWorkshop.asi.
+  2. Start the game or server. ShroudForge's log (shroudforge\logs\) says
+        Native DLL loaded ... mods\SmartWorkshop\SmartWorkshop.dll
+     If ShroudForge's DLL Manager asks you to confirm SmartWorkshop.dll, allow it and restart.
+  3. smart-workshop.log in mods\SmartWorkshop\ starts with "Smart Workshop 1.2.0".
 
 
 INSTALL - BisectHosting
@@ -169,12 +222,14 @@ THE LOG (smart-workshop.log next to smart-workshop.ini; the last 5 sessions are 
   --- plan ---         the stations that take part and what Smart Workshop plans for them
   load / collected / stopped / resumed     what it actually did
   menu: / remote:      the in-game menu and, on servers, settings changed by players (and refused requests)
+  kiln: / via kiln.stations   with Kiln: what Kiln was asked to do and what it answered
+  not refilled again for 5 minutes   a station that refused a refill is left alone for a while
 
 
 COMPATIBILITY
 -------------
   Works alongside Survivor Crafting Anywhere, Quick Stack Area and Creative Mode, and with mods loaded through other
-  loaders that hook the same game functions.
+  loaders that hook the same game functions. Loads through Ultimate ASI Loader, Kiln or ShroudForge.
 
 
 KNOWN LIMITS
@@ -188,7 +243,8 @@ KNOWN LIMITS
 UNINSTALL
 ---------
 Players: delete Scripts\SmartWorkshop.asi and the Scripts\SmartWorkshop folder (settings, logs, README).
-Servers: delete mods\SmartWorkshop (and on BisectHosting DLLMods\SmartWorkshop.dll plus its chainloader.ini line).
+Servers: delete mods\SmartWorkshop (and on BisectHosting DLLMods\SmartWorkshop.dll plus its chainloader.ini line;
+with Kiln also kiln\native\SmartWorkshop; with ShroudForge mods\SmartWorkshop).
 Stations Smart Workshop stopped at a target stay stopped until you start them (Scripts\SmartWorkshop\state.txt
 only remembers which ones). On a dedicated server the menu's data is sent to players as hidden name texts that
 are never shown in the world; the game may keep them in the world save (a few KB, replaced, not added to).
